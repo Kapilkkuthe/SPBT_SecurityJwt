@@ -1,7 +1,9 @@
 package com.security.baiscSpring.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -17,6 +19,10 @@ public class User implements UserDetails {
     private String email;
     private String mobile;
     private String password;
+
+    @OneToOne(mappedBy = "user")
+    @JsonIgnore
+    private RefreshToken refreshToken;
 
     public String getUserId() {
         return userId;
@@ -86,15 +92,24 @@ public class User implements UserDetails {
         this.password = password;
     }
 
+    public RefreshToken getRefreshToken() {
+        return refreshToken;
+    }
+
+    public void setRefreshToken(RefreshToken refreshToken) {
+        this.refreshToken = refreshToken;
+    }
+
     public User() {
     }
 
-    public User(String userId, String username, String email, String mobile, String password) {
+    public User(String userId, String username, String email, String mobile, String password, RefreshToken refreshToken) {
         this.userId = userId;
         this.username = username;
         this.email = email;
         this.mobile = mobile;
         this.password = password;
+        this.refreshToken = refreshToken;
     }
 
     @Override
@@ -105,6 +120,7 @@ public class User implements UserDetails {
                 ", email='" + email + '\'' +
                 ", mobile='" + mobile + '\'' +
                 ", password='" + password + '\'' +
+                ", refreshToken=" + refreshToken +
                 '}';
     }
 }
